@@ -185,6 +185,7 @@ class Network:
         for name, var in self.vars.items():
             if name != 'lod':
                 print (name)
+                print (var.__dict__)
                 print (var.trainable)
         self.trainables = OrderedDict((name, var) for name, var in self.vars.items() if var.trainable)
         self.var_global_to_local = OrderedDict((var.name.split(":")[0], name) for name, var in self.vars.items())
