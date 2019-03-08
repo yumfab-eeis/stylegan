@@ -187,7 +187,7 @@ class Network:
         #         print (name)
         #         print (var.__dict__)
         #self.trainables = OrderedDict((name, var) for name, var in self.vars.items() if var.trainable)
-        self.trainables = OrderedDict((name, var) for name, var in self.vars.items()
+        self.trainables = OrderedDict((name, var) for name, var in self.vars.items())
         self.var_global_to_local = OrderedDict((var.name.split(":")[0], name) for name, var in self.vars.items())
 
     def reset_own_vars(self) -> None:
