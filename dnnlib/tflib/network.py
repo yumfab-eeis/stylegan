@@ -183,6 +183,7 @@ class Network:
         self.vars = OrderedDict(self.own_vars)
         self.vars.update((comp.name + "/" + name, var) for comp in self.components.values() for name, var in comp.vars.items())
         for name, var in self.vars.items() if var.trainable:
+            print (name)
             print (type(var))
         self.trainables = OrderedDict((name, var) for name, var in self.vars.items() if var.trainable)
         self.var_global_to_local = OrderedDict((var.name.split(":")[0], name) for name, var in self.vars.items())
