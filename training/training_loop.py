@@ -56,7 +56,7 @@ def training_schedule(
     cur_nimg,
     training_set,
     num_gpus,
-    lod_initial_resolution  = 1024,        # Image resolution used at the beginning.
+    lod_initial_resolution  = 4,        # Image resolution used at the beginning.
     lod_training_kimg       = 600,      # Thousands of real images to show before doubling the resolution.
     lod_transition_kimg     = 600,      # Thousands of real images to show when fading in new layers.
     minibatch_base          = 16,       # Maximum minibatch size, divided evenly among GPUs.
@@ -133,9 +133,9 @@ def training_loop(
     network_snapshot_ticks  = 10,       # How often to export network snapshots?
     save_tf_graph           = False,    # Include full TensorFlow computation graph in the tfevents file?
     save_weight_histograms  = False,    # Include weight histograms in the tfevents file?
-    resume_run_id           = None,     # Run ID or network pkl to resume training from, None = start from scratch.
+    resume_run_id           = 100,     # Run ID or network pkl to resume training from, None = start from scratch.
     resume_snapshot         = None,     # Snapshot index to resume training from, None = autodetect.
-    resume_kimg             = 0.0,      # Assumed training progress at the beginning. Affects reporting and training schedule.
+    resume_kimg             = 10000,      # Assumed training progress at the beginning. Affects reporting and training schedule.
     resume_time             = 0.0):     # Assumed wallclock time at the beginning. Affects reporting.
 
     # Initialize dnnlib and TensorFlow.
