@@ -186,8 +186,7 @@ class Network:
         #     if name != 'lod':
         #         print (name)
         #         print (var.__dict__)
-        #self.trainables = OrderedDict((name, var) for name, var in self.vars.items() if var.trainable)
-        self.trainables = OrderedDict((name, var) for name, var in self.vars.items())
+        self.trainables = OrderedDict((name, var) for name, var in self.vars.items() if var.trainable)
         self.var_global_to_local = OrderedDict((var.name.split(":")[0], name) for name, var in self.vars.items())
 
     def reset_own_vars(self) -> None:
@@ -503,8 +502,7 @@ class Network:
             # Report layer.
             layer_name = scope[len(self.scope) + 1:]
             layer_output = cur_ops[-1].outputs[0] if cur_ops else cur_vars[-1][1]
-            #layer_trainables = [var for _name, var in cur_vars if var.trainable]
-            layer_trainables = [var for _name, var in cur_vars]
+            layer_trainables = [var for _name, var in cur_vars if var.trainable]
             layers.append((layer_name, layer_output, layer_trainables))
 
         recurse(self.scope, self.list_ops(), list(self.vars.items()), 0)
