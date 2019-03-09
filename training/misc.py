@@ -101,7 +101,7 @@ def create_result_subdir(result_dir, desc):
             except ValueError:
                 pass
 
-        result_subdir = os.path.join(result_dir, '%03d-%s' % (run_id, desc))
+        result_subdir = os.path.join(result_dir, '%05d-%s' % (run_id, desc))
         try:
             os.makedirs(result_subdir)
             break
@@ -111,7 +111,6 @@ def create_result_subdir(result_dir, desc):
             raise
 
     print("Saving results to", result_subdir)
-    set_output_log_file(os.path.join(result_subdir, 'log.txt'))
 
     # Export config.
     try:
