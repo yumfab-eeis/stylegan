@@ -74,7 +74,7 @@ def main(
     import moviepy.editor # pip install moviepy
     result_subdir = config.result_dir
     #result_subdir = misc.create_result_subdir(config.result_dir, train.desc)
-    moviepy.editor.VideoClip(make_frame, duration=duration_sec).write_videofile(os.path.join(result_subdir, mp4.replace('/', '_')), fps=mp4_fps, codec='libx264', bitrate=mp4_bitrate)
+    moviepy.editor.VideoClip(make_frame, duration=duration_sec).write_videofile(os.path.join(result_subdir, os.path.basename(mp4)), fps=mp4_fps, codec='libx264', bitrate=mp4_bitrate)
     open(os.path.join(result_subdir, '_done.txt'), 'wt').close()
 
 if __name__ == "__main__":
