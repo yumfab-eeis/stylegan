@@ -88,6 +88,41 @@ def save_image_grid(images, filename, drange=[0,1], grid_size=None):
 
 #----------------------------------------------------------------------------
 # Locating results.
+def create_result_subdir(result_dir, desc):
+
+    # Select run ID and create subdir.
+    while True:
+        run_id = 0
+        for fname in glob.glob(os.path.join(result_dir, '*')):
+            try:
+                fbase = os.path.basename(fname)
+                ford = int(fbase[:fbase.find('-')])
+                run_id = max(run_id, ford + 1)
+            except ValueError:
+                pass
+
+        result_subdir = os.path.join(result_dir, '%03d-%s' % (run_id, desc))
+        try:
+            os.makedirs(result_subdir)
+            break
+        except OSError:
+            if os.path.isdir(result_subdir):
+                continue
+            raise
+
+    print("Saving results to", result_subdir)
+    set_output_log_file(os.path.join(result_subdir, 'log.txt'))
+
+    # Export config.
+    try:
+        with open(os.path.join(result_subdir, 'config.txt'), 'wt') as fout:
+            for k, v in sorted(config.__dict__.items()):
+                if not k.startswith('_'):
+                    fout.write("%s = %s\n" % (k, str(v)))
+    except:
+        pass
+
+    return result_subdir
 
 def locate_run_dir(run_id_or_run_dir):
     if isinstance(run_id_or_run_dir, str):
