@@ -50,7 +50,7 @@ def main(
     print('Generating latent vectors...')
     rnd = np.random.RandomState(5)
     shape = [num_frames, np.prod(grid_size)] + Gs.input_shape[1:] # [frame, image, channel, component]
-    all_latents = rnd.randn(*shape, Gs.input_shape[1]).astype(np.float32)
+    all_latents = rnd.randn(*shape).astype(np.float32)
     all_latents = scipy.ndimage.gaussian_filter(all_latents, [smoothing_sec * mp4_fps] + [0] * len(Gs.input_shape), mode='wrap')
     all_latents /= np.sqrt(np.mean(np.square(all_latents)))
 
