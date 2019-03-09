@@ -33,7 +33,7 @@ def main(
 
     # Pick latent vector.
     rnd = np.random.RandomState(5)
-    latents = rnd.randn(1, Gs.input_shape[1])
+    latents = rnd.randn(10, Gs.input_shape[1])
 
     # Generate image.
     fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
