@@ -15,6 +15,7 @@ import dnnlib
 import dnnlib.tflib as tflib
 import config
 from training import misc
+import scipy
 
 def main(
     run_id          = 101,     # Run ID or network pkl to resume training from, None = start from scratch.
