@@ -18,7 +18,7 @@ from training import misc
 
 def main(
     run_id          = 101,     # Run ID or network pkl to resume training from, None = start from scratch.
-    snapshot        = None、     # Snapshot index to resume training from, None = autodetect.
+    snapshot        = None,     # Snapshot index to resume training from, None = autodetect.
     grid_size       = [1,1],
     image_shrink    = 1,
     image_zoom      = 1,
@@ -29,7 +29,7 @@ def main(
     mp4_codec       = 'libx265',
     mp4_bitrate     = '16M',
     random_seed     = 1000,
-    minibatch_size  = 8):
+    minibatch_size  = 8 ):
 
     # Initialize TensorFlow.
     tflib.init_tf()
