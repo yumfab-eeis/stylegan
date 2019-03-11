@@ -50,34 +50,40 @@ def main(
     # Pick latent vector.
     print('Generating latent vectors...')
     rnd = np.random.RandomState(5)
-    shape = [num_frames, Gs.input_shape[1]]
+    shape = [num_frames, , np.prod(grid_size), Gs.input_shape[1]]
     all_latents = rnd.randn(*shape).astype(np.float32)
     all_latents = scipy.ndimage.gaussian_filter(all_latents, [smoothing_sec * mp4_fps] + [0], mode='wrap')
     all_latents /= np.sqrt(np.mean(np.square(all_latents)))
 
     all_dlatents = Gs.components.mapping.run(all_latents, None)
 
-    # Frame generation func for moviepy.
-    fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
-    def make_frame(t):
-        frame_idx = int(np.clip(np.round(t * mp4_fps), 0, num_frames - 1))
-        dlatents = all_dlatents[frame_idx]
-        labels = np.zeros([dlatents.shape[0], 0], np.float32)
-        # images = Gs.run(latents, labels, minibatch_size=minibatch_size, num_gpus=config.num_gpus, out_mul=127.5, out_add=127.5, out_shrink=image_shrink, out_dtype=np.uint8)
+    for idx in range(num_frames):
+        dlatents = all_dlatents[idx]
         images = Gs.run(dlatents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
-        grid = misc.create_image_grid(images, grid_size).transpose(1, 2, 0) # HWC
-        if image_zoom > 1:
-            grid = scipy.ndimage.zoom(grid, [image_zoom, image_zoom, 1], order=0)
-        if grid.shape[2] == 1:
-            grid = grid.repeat(3, 2) # grayscale => RGB
-        return grid
-
-    # Generate video.
-    import moviepy.editor # pip install moviepy
-    result_subdir = config.result_dir
-    #result_subdir = misc.create_result_subdir(config.result_dir, train.desc)
-    moviepy.editor.VideoClip(make_frame, duration=duration_sec).write_videofile(os.path.join(result_subdir, os.path.basename(mp4)), fps=mp4_fps, codec='libx264', bitrate=mp4_bitrate)
-    open(os.path.join(result_subdir, '_done.txt'), 'wt').close()
+        png_filename = os.path.join(config.result_dir, 'frame_%s.png' % str(idx).zfill(8))
+        PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
+    #
+    # # Frame generation func for moviepy.
+    # fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+    # def make_frame(t):
+    #     frame_idx = int(np.clip(np.round(t * mp4_fps), 0, num_frames - 1))
+    #     dlatents = all_dlatents[frame_idx]
+    #     labels = np.zeros([dlatents.shape[0], 0], np.float32)
+    #     # images = Gs.run(latents, labels, minibatch_size=minibatch_size, num_gpus=config.num_gpus, out_mul=127.5, out_add=127.5, out_shrink=image_shrink, out_dtype=np.uint8)
+    #     images = Gs.run(dlatents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+    #     grid = misc.create_image_grid(images, grid_size).transpose(1, 2, 0) # HWC
+    #     if image_zoom > 1:
+    #         grid = scipy.ndimage.zoom(grid, [image_zoom, image_zoom, 1], order=0)
+    #     if grid.shape[2] == 1:
+    #         grid = grid.repeat(3, 2) # grayscale => RGB
+    #     return grid
+    #
+    # # Generate video.
+    # import moviepy.editor # pip install moviepy
+    # result_subdir = config.result_dir
+    # #result_subdir = misc.create_result_subdir(config.result_dir, train.desc)
+    # moviepy.editor.VideoClip(make_frame, duration=duration_sec).write_videofile(os.path.join(result_subdir, os.path.basename(mp4)), fps=mp4_fps, codec='libx264', bitrate=mp4_bitrate)
+    # open(os.path.join(result_subdir, '_done.txt'), 'wt').close()
 
 if __name__ == "__main__":
     main()
