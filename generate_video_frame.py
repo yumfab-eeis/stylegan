@@ -50,19 +50,21 @@ def main(
     # Pick latent vector.
     print('Generating latent vectors...')
     rnd = np.random.RandomState(5)
-    shape = [num_frames, np.prod(grid_size)] + Gs.input_shape[1:] # [frame, image, channel, component]
+    shape = [num_frames] + Gs.input_shape[1]
     all_latents = rnd.randn(*shape).astype(np.float32)
     all_latents = scipy.ndimage.gaussian_filter(all_latents, [smoothing_sec * mp4_fps] + [0] * len(Gs.input_shape), mode='wrap')
     all_latents /= np.sqrt(np.mean(np.square(all_latents)))
+
+    all_dlatents = Gs.components.mapping.run(all_latents, None)
 
     # Frame generation func for moviepy.
     fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
     def make_frame(t):
         frame_idx = int(np.clip(np.round(t * mp4_fps), 0, num_frames - 1))
-        latents = all_latents[frame_idx]
-        labels = np.zeros([latents.shape[0], 0], np.float32)
+        dlatents = all_dlatents[frame_idx]
+        labels = np.zeros([dlatents.shape[0], 0], np.float32)
         # images = Gs.run(latents, labels, minibatch_size=minibatch_size, num_gpus=config.num_gpus, out_mul=127.5, out_add=127.5, out_shrink=image_shrink, out_dtype=np.uint8)
-        images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+        images = Gs.run(dlatents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
         grid = misc.create_image_grid(images, grid_size).transpose(1, 2, 0) # HWC
         if image_zoom > 1:
             grid = scipy.ndimage.zoom(grid, [image_zoom, image_zoom, 1], order=0)
