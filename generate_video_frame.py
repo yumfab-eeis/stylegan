@@ -51,7 +51,7 @@ def main(
     print('Generating latent vectors...')
     rnd = np.random.RandomState(5)
     print (Gs.input_shape)
-    shape = [num_frames, Gs.input_shape[1:]]
+    shape = [num_frames, Gs.input_shape[1]]
     print (shape)
     print (*shape)
     all_latents = rnd.randn(*shape).astype(np.float32)
