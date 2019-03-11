@@ -53,7 +53,7 @@ def main(
     shape = [num_frames, Gs.input_shape[1]]
     all_latents = rnd.randn(*shape).astype(np.float32)
     all_latents = scipy.ndimage.gaussian_filter(all_latents, [smoothing_sec * mp4_fps] + [0], mode='wrap')
-    all_latents /= np.sqrt(np.mean(np.square(all_latents)))
+    #all_latents /= np.sqrt(np.mean(np.square(all_latents)))
 
     all_dlatents = Gs.components.mapping.run(all_latents, None)
 
