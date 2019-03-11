@@ -24,7 +24,7 @@ def main(
     grid_size       = [1,1],
     image_shrink    = 1,
     image_zoom      = 1,
-    duration_sec    = 10.0,
+    duration_sec    = 3.0,
     smoothing_sec   = 1.0,
     mp4             = None,
     mp4_fps         = 30,
