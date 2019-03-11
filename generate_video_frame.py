@@ -57,6 +57,7 @@ def main(
 
     all_dlatents = Gs.components.mapping.run(all_latents, None)
 
+    fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
     for idx in range(num_frames):
         dlatents = all_dlatents[idx]
         images = Gs.run(dlatents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
