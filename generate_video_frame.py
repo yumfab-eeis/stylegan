@@ -53,7 +53,7 @@ def transitionAtoB_v2(
     os.makedirs(os.path.join(config.result_dir, os.path.basename(network_pkl).replace(".mp4","")), exist_ok=True)
     for idx in range(num_frames):
         # Save image.
-        png_filename = os.path.join(config.result_dir, os.path.basename(network_pkl).replace(".mp4",""), 'frame_'+'{0:04d}'.format(i)+'.png')
+        png_filename = os.path.join(config.result_dir, os.path.basename(network_pkl).replace(".mp4",""), 'frame_'+'{0:04d}'.format(idx)+'.png')
         PIL.Image.fromarray(images[idx], 'RGB').save(png_filename)
 
 def transitionAtoB(
