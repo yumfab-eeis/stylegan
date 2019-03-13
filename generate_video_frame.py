@@ -56,7 +56,7 @@ def main(
     #all_latents /= np.sqrt(np.mean(np.square(all_latents)))
 
     all_dlatents = Gs.components.mapping.run(all_latents, None)
-    all_dlatents = scipy.ndimage.gaussian_filter(all_dlatents, [smoothing_sec * mp4_fps] + [0], mode='wrap')
+    all_dlatents = scipy.ndimage.gaussian_filter(all_dlatents, [smoothing_sec * mp4_fps] + [0]*2, mode='wrap')
     print (shape, all_latents.shape, all_dlatents.shape)
 
     fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
