@@ -21,7 +21,7 @@ import train
 def transitionAtoB_v2(
     run_id          = 102,     # Run ID or network pkl to resume training from, None = start from scratch.
     snapshot        = None,
-    num_frames      = 10,
+    num_frames      = 100,
     interpolate_dim = 350):
 
     # Initialize TensorFlow.
