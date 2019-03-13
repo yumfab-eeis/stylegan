@@ -18,6 +18,40 @@ from training import misc
 import scipy
 import train
 
+def transitionAtoB():
+    # Initialize TensorFlow.
+    tflib.init_tf()
+
+    # Load pre-trained network.
+    network_pkl = misc.locate_network_pkl(run_id, snapshot)
+    print('Loading networks from "%s"...' % network_pkl)
+    G, D, Gs = misc.load_pkl(network_pkl)
+
+    # Print network details.
+    Gs.print_layers()
+
+    # Pick latent vector.
+    rnd = np.random.RandomState(10)  # seed = 10
+    latents0 = rnd.randn(1, Gs.input_shape[1])
+    latents1 = rnd.randn(1, Gs.input_shape[1])
+    latents2 = rnd.randn(1, Gs.input_shape[1])
+    latents3 = rnd.randn(1, Gs.input_shape[1])
+    latents4 = rnd.randn(1, Gs.input_shape[1])
+    latents5 = rnd.randn(1, Gs.input_shape[1])
+    latents6 = rnd.randn(1, Gs.input_shape[1])
+
+    num_split = 39  # 2つのベクトルを39分割
+    for i in range(40):
+        latents = latents6+(latents0-latents6)*i/num_split
+        # Generate image.
+        fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+        images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+
+        # Save image.
+        os.makedirs(config.result_dir, exist_ok=True)
+        png_filename = os.path.join(config.result_dir, 'photo'+'{0:04d}'.format(i)+'.png')
+        PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
+
 def main(
     run_id          = 101,     # Run ID or network pkl to resume training from, None = start from scratch.
     snapshot        = None,     # Snapshot index to resume training from, None = autodetect.
@@ -89,4 +123,4 @@ def main(
     # open(os.path.join(result_subdir, '_done.txt'), 'wt').close()
 
 if __name__ == "__main__":
-    main()
+    transitionAtoB()
