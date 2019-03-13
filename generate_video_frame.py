@@ -56,6 +56,7 @@ def main(
     #all_latents /= np.sqrt(np.mean(np.square(all_latents)))
 
     all_dlatents = Gs.components.mapping.run(all_latents, None)
+    print (shape, all_latents.shape, all_dlatents.shape)
 
     fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
     for idx in range(num_frames):
