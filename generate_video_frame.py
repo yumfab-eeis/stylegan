@@ -18,7 +18,7 @@ from training import misc
 import scipy
 import train
 
-def transitionAtoB_v2
+def transitionAtoB_v2(
     run_id          = 102,     # Run ID or network pkl to resume training from, None = start from scratch.
     snapshot        = None,
     num_frames      = 10):
