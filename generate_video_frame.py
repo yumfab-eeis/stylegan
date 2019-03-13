@@ -60,7 +60,7 @@ def main(
     fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
     for idx in range(num_frames):
         dlatents = all_dlatents[idx]
-        images = Gs.run(dlatents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+        images = Gs.run(dlatents, None, truncation_psi=0.0, randomize_noise=True, output_transform=fmt)
         png_filename = os.path.join(config.result_dir, 'frame_%s.png' % str(idx).zfill(8))
         PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
     #
