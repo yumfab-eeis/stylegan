@@ -18,10 +18,47 @@ from training import misc
 import scipy
 import train
 
+def transitionAtoB_v2
+    run_id          = 102,     # Run ID or network pkl to resume training from, None = start from scratch.
+    snapshot        = None,
+    num_frames      = 10):
+
+    # Initialize TensorFlow.
+    tflib.init_tf()
+
+    # Load pre-trained network.
+    network_pkl = misc.locate_network_pkl(run_id, snapshot)
+    print('Loading networks from "%s"...' % network_pkl)
+    G, D, Gs = misc.load_pkl(network_pkl)
+
+    # Print network details.
+    Gs.print_layers()
+
+    # Pick latent vector.
+    rnd = np.random.RandomState(10)  # seed = 10
+    init_latent = rnd.randn(1, Gs.input_shape[1])[0]
+
+    def apply_latent_fudge(fudge):
+      copy = np.copy(init_latent)
+      copy[interpolate_dim] += fudge
+      return copy
+
+    interpolate = np.linspace(0., 30., num_frames) - 15
+    latents = np.array(list(map(apply_latent_fudge, interpolate)))
+
+    images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+
+    os.makedirs(os.path.join(config.result_dir, 'video'), exist_ok=True)
+    for idx in range(num_frames):
+        # Save image.
+        png_filename = os.path.join(os.path.join(config.result_dir, os.path.basename(network_pkl).replace(".mp4","")), 'frame_'+'{0:04d}'.format(i)+'.png')
+        PIL.Image.fromarray(images[idx], 'RGB').save(png_filename)
+
 def transitionAtoB(
     run_id          = 102,     # Run ID or network pkl to resume training from, None = start from scratch.
     snapshot        = None,
     num_gen_noise   = 100):
+    #http://cedro3.com/ai/stylegan/
 
     # Initialize TensorFlow.
     tflib.init_tf()
@@ -124,4 +161,4 @@ def main(
     # open(os.path.join(result_subdir, '_done.txt'), 'wt').close()
 
 if __name__ == "__main__":
-    transitionAtoB()
+    transitionAtoB_v2()
