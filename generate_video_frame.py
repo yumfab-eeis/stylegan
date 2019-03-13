@@ -42,8 +42,8 @@ def transitionAtoB(
     latentsB = rnd.randn(1, Gs.input_shape[1])
 
     num_split = 39  # 2つのベクトルを39分割
-    for i in range(40):
-        latents = latents6+(latents0-latents6)*i/num_split
+    for i in range(30):
+        latents = latentsB+(latentsA-latentsB)*i/num_split
         # Generate image.
         fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
         images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
