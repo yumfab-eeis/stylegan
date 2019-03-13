@@ -19,9 +19,10 @@ import scipy
 import train
 
 def transitionAtoB(
-    run_id          = 101,     # Run ID or network pkl to resume training from, None = start from scratch.
-    snapshot        = None,):
-    
+    run_id          = 102,     # Run ID or network pkl to resume training from, None = start from scratch.
+    snapshot        = None,
+    num_gen_noise   = 100):
+
     # Initialize TensorFlow.
     tflib.init_tf()
 
@@ -35,13 +36,10 @@ def transitionAtoB(
 
     # Pick latent vector.
     rnd = np.random.RandomState(10)  # seed = 10
-    latents0 = rnd.randn(1, Gs.input_shape[1])
-    latents1 = rnd.randn(1, Gs.input_shape[1])
-    latents2 = rnd.randn(1, Gs.input_shape[1])
-    latents3 = rnd.randn(1, Gs.input_shape[1])
-    latents4 = rnd.randn(1, Gs.input_shape[1])
-    latents5 = rnd.randn(1, Gs.input_shape[1])
-    latents6 = rnd.randn(1, Gs.input_shape[1])
+    latentsA = rnd.randn(1, Gs.input_shape[1])
+    for _ in range(num_gen_noise)
+        latents_ = rnd.randn(1, Gs.input_shape[1])
+    latentsB = rnd.randn(1, Gs.input_shape[1])
 
     num_split = 39  # 2つのベクトルを39分割
     for i in range(40):
