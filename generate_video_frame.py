@@ -37,7 +37,7 @@ def transitionAtoB(
     # Pick latent vector.
     rnd = np.random.RandomState(10)  # seed = 10
     latentsA = rnd.randn(1, Gs.input_shape[1])
-    for _ in range(num_gen_noise)
+    for _ in range(num_gen_noise):
         latents_ = rnd.randn(1, Gs.input_shape[1])
     latentsB = rnd.randn(1, Gs.input_shape[1])
 
@@ -49,8 +49,8 @@ def transitionAtoB(
         images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
 
         # Save image.
-        os.makedirs(config.result_dir, exist_ok=True)
-        png_filename = os.path.join(config.result_dir, 'photo'+'{0:04d}'.format(i)+'.png')
+        os.makedirs(os.path.join(config.result_dir, 'video'), exist_ok=True)
+        png_filename = os.path.join(os.path.join(config.result_dir, 'video'), 'photo'+'{0:04d}'.format(i)+'.png')
         PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
 
 def main(
