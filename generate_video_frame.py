@@ -18,7 +18,10 @@ from training import misc
 import scipy
 import train
 
-def transitionAtoB():
+def transitionAtoB(
+    run_id          = 101,     # Run ID or network pkl to resume training from, None = start from scratch.
+    snapshot        = None,):
+    
     # Initialize TensorFlow.
     tflib.init_tf()
 
