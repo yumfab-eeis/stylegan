@@ -48,13 +48,12 @@ def transitionAtoB_v2(
     latents = np.array(list(map(apply_latent_fudge, interpolate)))
 
     fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
-    images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
-
     os.makedirs(os.path.join(config.result_dir, os.path.basename(network_pkl).replace(".mp4","")), exist_ok=True)
     for idx in range(num_frames):
+        images = Gs.run(latents[idx], None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
         # Save image.
         png_filename = os.path.join(config.result_dir, os.path.basename(network_pkl).replace(".mp4",""), 'frame_'+'{0:04d}'.format(idx)+'.png')
-        PIL.Image.fromarray(images[idx], 'RGB').save(png_filename)
+        PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
 
 def transitionAtoB(
     run_id          = 102,     # Run ID or network pkl to resume training from, None = start from scratch.
